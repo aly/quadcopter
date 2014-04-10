@@ -3,7 +3,7 @@
 #define MAX_SIGNAL 2000
 #define SPIN_SIGNAL 1200
 #define MIN_SIGNAL 700
-#define MOTOR_PIN 8
+#define MOTOR_PIN 9
 
 // ESC wiring, white to pin 9, black to ground
 
@@ -15,30 +15,17 @@ void setup() {
     
     motor.attach(MOTOR_PIN);
     
-    // Send min output
+    // Send min output (used to initialise ESC)
     Serial.println("Sending minimum output");
     motor.writeMicroseconds(MIN_SIGNAL);
-
-    // Wait for input
-    while (!Serial.available());
-    Serial.read();
-
-    Serial.println("Now spinning ??");
-    motor.writeMicroseconds(SPIN_SIGNAL);
-    
-    // Wait for input
-    while (!Serial.available());
-    Serial.read();
-
-    Serial.println("Now spinning faster??");
-    motor.writeMicroseconds(MAX_SIGNAL);
 }
 
 void loop() {  
     // Wait for input
-    /*while (!Serial.available());
-    char* speed = Serial.read();
-
-    Serial.println("Now spinning at " + speed);
-    motor.writeMicroseconds(atoi(speed));*/
+    while (Serial.available() > 0) {
+        int speed = Serial.parseInt();
+        Serial.println("Now spinning at " + (String)speed);
+        // Set motor to specified speed
+        motor.writeMicroseconds(speed);
+    }
 }
