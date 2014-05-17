@@ -1,35 +1,38 @@
 #include <Servo.h>
 
 #define MAX_SIGNAL 2000
-#define SPIN_SIGNAL 1200
 #define MIN_SIGNAL 700
 #define MOTOR_PIN_1 9 // Motor 1
 #define MOTOR_PIN_2 10 // Motor 2
 #define MOTOR_PIN_3 11 // Motor 3
 #define MOTOR_PIN_4 12 // Motor 4
 
+// Store motor speeds
+int motor_speed[4];
+
 // ESC wiring, white to pin 9, black to ground
 
-Servo motor_1;
-Servo motor_2;
-Servo motor_3;
-Servo motor_4;
+Servo motor[4];
 
 void setup() {
     Serial.begin(9600);
     Serial.println("Program begin...");
-    
-    motor_1.attach(MOTOR_PIN_1);
-    motor_2.attach(MOTOR_PIN_2);
-    motor_3.attach(MOTOR_PIN_3);
-    motor_4.attach(MOTOR_PIN_4);
+
+    // Initialise the motor speeds
+    for (int i = 0; i < 4; i++) {
+        motor_speed[i] = MIN_SIGNAL;
+    }
+
+    motor[0].attach(MOTOR_PIN_1);
+    motor[1].attach(MOTOR_PIN_2);
+    motor[2].attach(MOTOR_PIN_3);
+    motor[3].attach(MOTOR_PIN_4);
     
     // Send min output (used to initialise ESC)
     Serial.println("Sending minimum output");
-    motor_1.writeMicroseconds(MIN_SIGNAL);
-    motor_2.writeMicroseconds(MIN_SIGNAL);
-    motor_3.writeMicroseconds(MIN_SIGNAL);
-    motor_4.writeMicroseconds(MIN_SIGNAL);
+    for(int i = 0; i < 4; i++) {
+        motor[i].writeMicroseconds(MIN_SIGNAL);
+    }
 }
 
 void loop() {  
@@ -38,9 +41,25 @@ void loop() {
         int speed = Serial.parseInt();
         Serial.println("Now spinning at " + (String)speed);
         // Set motor to specified speed
-        motor_1.writeMicroseconds(speed);
-        motor_2.writeMicroseconds(speed);
-        motor_3.writeMicroseconds(speed);
-        motor_4.writeMicroseconds(speed);
+        for (int i = 0; i < 4; i++) {
+            int pwm = update_motor(i, speed);
+            motor[i].writeMicroseconds(pwm);
+        }
     }
 }
+
+
+int update_motor(int motor, int speed) {
+    int pwm;
+
+    if (motor_speed[motor] + speed > MAX_SIGNAL) {
+        pwm = MAX_SIGNAL;
+    } else if (motor_speed[motor] + speed < MIN_SIGNAL) {
+        pwm = MIN_SIGNAL;
+    } else {
+        pwm = motor_speed[motor] + speed;
+    }
+
+    return pwm;
+}
+
