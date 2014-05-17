@@ -52,6 +52,12 @@ void loop() {
 int update_motor(int motor, int speed) {
     int pwm;
 
+    // Safety code reduce danger when testing.
+    if (speed > 10) {
+        Serial.println("Safety error: speed increment too large!!");
+        return motor_speed[motor];
+    }
+
     if (motor_speed[motor] + speed > MAX_SIGNAL) {
         pwm = MAX_SIGNAL;
     } else if (motor_speed[motor] + speed < MIN_SIGNAL) {
