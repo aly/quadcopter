@@ -81,7 +81,7 @@ void loop() {
     double deltad = 56.0;
 
     char buf[128];
-    sprintf(buf, "delta: %d / %d / %d", (int)(delta * 100), (int)(deltad*100), deltal);
+    sprintf(buf, "delta: %d / %d / %d", (int)(delta * 100), (int)(deltad * 100), deltal);
     Serial.println(buf);
 
     // limit framerate
@@ -91,7 +91,7 @@ void loop() {
         // Wait for input
         Serial.println("waiting for input");
         while (Serial.available() <= 0) { }
-        while (Serial.available() > 0 ) { Serial.read(); }
+        while (Serial.available() > 0) { Serial.read(); }
         Serial.println("input accepted");
 
         set_motor_speed(0, motor_0_values[motors_running]);
@@ -120,7 +120,7 @@ void loop() {
     static double kp = 1.0;
     double pval = (error * 100) / kp;
 
-    //CONTROLLER OUTPUT = (1/INTEGRAL) (Integral of) e(t) d(t)
+    // CONTROLLER OUTPUT = (1/INTEGRAL) (Integral of) e(t) d(t)
 
     // CONTROLLER OUTPUT = DERIVATIVE * dm / dt
 
@@ -163,11 +163,11 @@ int setupL3G4200D(int scale){
     writeRegister(L3G4200D_Address, CTRL_REG3, 0b00001000);
 
     // CTRL_REG4 controls the full-scale range, among other things:
-    if(scale == 250){
+    if (scale == 250){
         writeRegister(L3G4200D_Address, CTRL_REG4, 0b00000000);
-    }else if(scale == 500){
+    } else if (scale == 500) {
         writeRegister(L3G4200D_Address, CTRL_REG4, 0b00010000);
-    }else{
+    } else {
         writeRegister(L3G4200D_Address, CTRL_REG4, 0b00110000);
     }
 
@@ -257,12 +257,10 @@ int update_motor( float delta ) {
         sprintf( buf, "max diff: '%f','%f', actualdiff: '%f', set: '%d', actual: '%f'", max_diff, max_diff2, difference, motor_speed_set[i], motor_speed_actual[i]);
         Serial.println(buf);
     }
-        if ( difference > 0 )
-        {
+        if ( difference > 0 ) {
             motor_speed_actual[i] = MIN( (motor_speed_actual[i] + max_diff), MAX_SIGNAL );
         }
-        else if ( difference < 0 )
-        {
+        else if ( difference < 0 ) {
             motor_speed_actual[i] = MAX( (motor_speed_actual[i] - max_diff), MIN_SIGNAL );
         }
         // update actual motor with the new value
