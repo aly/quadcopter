@@ -16,3 +16,7 @@ GY80 inputs from left to right
 - T_INT1
 - P_XCLR
 - P_EOC
+
+ESC Wiring
+- White, signal pin
+- Black, ground
