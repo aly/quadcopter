@@ -9,7 +9,6 @@ void SerialInputSetup( State &s )
 	Serial.println("SerialInputSetup");
 }
 
-
 void SerialInputUpdate( unsigned long frame_delta, State &s )
 {
 	//Serial.println("SerialInputUpdate");
@@ -22,7 +21,7 @@ void SerialInputUpdate( unsigned long frame_delta, State &s )
 			input += inByte;
 		}*/
 		Serial.println("Recieved value: " + (String)val);
-		s.desired_motor_value = val;
+		s.desired_motor_zero_value = val;
     	//Serial.write(val);
     	//sSerial.print("\n");
 	}

@@ -7,7 +7,7 @@
 #include <Wire.h>
 
 // ms = 1/Hz * 1000
-float framerate = 0.5f; // 30 Hz
+float framerate = 0.5f; // value in Hz
 float update_time = (1.0f/framerate) * 1000.0f;
 unsigned long ms_per_frame = (int)(update_time + 0.5f);
 unsigned long last_update = 0;
@@ -16,6 +16,8 @@ State copter_state;
 
 void setup()
 {
+  //copter_state.setState(State.STATE_SETUP);
+
   Serial.begin(9600);
   Wire.begin();
 
@@ -28,7 +30,7 @@ void setup()
   //GyroSetup();
   //GyroCalibrate();
 
-  //delay(1500); //wait for the sensor to be ready
+  delay(1500); //wait for the sensor to be ready
   last_update = millis();
 }
 
