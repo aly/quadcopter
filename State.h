@@ -4,14 +4,17 @@
 class State
 {
 public:
-	State() : desired_motor_zero_value(0) {}
+	State() {
+		desired_motor_value[0] = 0;
+		desired_motor_value[1] = 0;
+	}
 	~State() {}
 
 	// StateMachine
 	//setState( COPTER_STATE s ) { state_machine = s; }
 	//getState( )
 public:
-	int desired_motor_zero_value;
+	int desired_motor_value[2];
 
 	// State machine for copter
 	enum COPTER_STATE {

@@ -21,7 +21,8 @@ void SerialInputUpdate( unsigned long frame_delta, State &s )
 			input += inByte;
 		}*/
 		Serial.println("Recieved value: " + (String)val);
-		s.desired_motor_zero_value = val;
+		s.desired_motor_value[0] = val;
+		s.desired_motor_value[1] = val;
     	//Serial.write(val);
     	//sSerial.print("\n");
 	}

@@ -51,14 +51,9 @@ void MotorSetup( State &s ) {
     motor_device[0].attach(MOTOR_PIN_1);
     motor_device[1].attach(MOTOR_PIN_2);
 
-    // Send min output (used to initialise ESC)
-    /*Serial.println("Sending minimum output");
-    for(int i = 0; i < NUM_MOTORS; i++) {
-        //motor[i].writeMicroseconds(motor_speed[i]);
-    }*/
-
     // set state to minumum value motor speed for motor[0]
-    s.desired_motor_zero_value = INIT_SIGNAL;
+    s.desired_motor_value[0] = INIT_SIGNAL;
+    s.desired_motor_value[1] = INIT_SIGNAL;
 
     // Send the min signal to the motor
     write_to_motor(true);
@@ -71,16 +66,16 @@ void MotorUpdate( float frame_delta,  State &s ) {
     // fix the desired value if it's out of bounds
     for ( int motor_id = 0; motor_id < NUM_MOTORS; ++motor_id )
     {
-        if ( s.desired_motor_zero_value != motor_speed_set[motor_id] )
+        if ( s.desired_motor_value[motor_id] != motor_speed_set[motor_id] )
         {
-            int uncapped_desired_pwm = s.desired_motor_zero_value;
-            s.desired_motor_zero_value = MIN(s.desired_motor_zero_value,MAX_SIGNAL);
-            s.desired_motor_zero_value = MAX(s.desired_motor_zero_value,MIN_SIGNAL);
-            if ( uncapped_desired_pwm != s.desired_motor_zero_value )
+            int uncapped_desired_pwm = s.desired_motor_value[motor_id];
+            s.desired_motor_value[motor_id] = MIN(s.desired_motor_value[motor_id],MAX_SIGNAL);
+            s.desired_motor_value[motor_id] = MAX(s.desired_motor_value[motor_id],MIN_SIGNAL);
+            if ( uncapped_desired_pwm != s.desired_motor_value[motor_id] )
             {
-                Serial.println("Limiting speed: Requested " + (String)uncapped_desired_pwm + " Setting " + s.desired_motor_zero_value);
+                Serial.println("Limiting speed: Requested " + (String)uncapped_desired_pwm + " Setting " + s.desired_motor_value[motor_id]);
             }
-            motor_speed_set[motor_id] = s.desired_motor_zero_value;
+            motor_speed_set[motor_id] = s.desired_motor_value[motor_id];
         }
     }
 

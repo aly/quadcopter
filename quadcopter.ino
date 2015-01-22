@@ -7,7 +7,7 @@
 #include <Wire.h>
 
 // ms = 1/Hz * 1000
-float framerate = 0.5f; // value in Hz
+float framerate = 30.0f;//0.5f; // value in Hz
 float update_time = (1.0f/framerate) * 1000.0f;
 unsigned long ms_per_frame = (int)(update_time + 0.5f);
 unsigned long last_update = 0;
